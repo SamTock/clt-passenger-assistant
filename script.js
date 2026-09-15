@@ -8,6 +8,12 @@ let passenger = {
     baggage: false
 };
 
+let surveyHelpful = null;
+
+
+// ==============================
+// BASIC CHAT FUNCTIONS
+// ==============================
 
 function addMessage(text, type = "assistant") {
 
@@ -46,9 +52,12 @@ function handleEnter(event) {
     if (event.key === "Enter") {
         sendMessage();
     }
-
 }
 
+
+// ==============================
+// START JOURNEY
+// ==============================
 
 function startJourney(type) {
 
@@ -56,9 +65,12 @@ function startJourney(type) {
 
     conversationStep = 0;
 
+    surveyHelpful = null;
+
+
     if (type === "departure") {
 
-        addMessage("I'm flying out of CLT.");
+        addMessage("I'm flying out of CLT.", "user");
 
         setTimeout(() => {
 
@@ -74,7 +86,7 @@ function startJourney(type) {
 
     if (type === "arrival") {
 
-        addMessage("I'm arriving at CLT.");
+        addMessage("I'm arriving at CLT.", "user");
 
         setTimeout(() => {
 
@@ -90,7 +102,7 @@ function startJourney(type) {
 
     if (type === "connection") {
 
-        addMessage("I have a connection.");
+        addMessage("I have a connection.", "user");
 
         setTimeout(() => {
 
@@ -106,12 +118,12 @@ function startJourney(type) {
 
     if (type === "gate") {
 
-        addMessage("I need to find my gate.");
+        addMessage("I need to find my gate.", "user");
 
         setTimeout(() => {
 
             addMessage(
-                "Sure. What is your airline and flight number?"
+                "Sure. What airline are you flying?"
             );
 
         }, 400);
@@ -122,7 +134,7 @@ function startJourney(type) {
 
     if (type === "baggage") {
 
-        addMessage("I need help with baggage.");
+        addMessage("I need help with baggage.", "user");
 
         setTimeout(() => {
 
@@ -138,36 +150,48 @@ function startJourney(type) {
 
     if (type === "transportation") {
 
-        addMessage("I need transportation.");
+        addMessage("I need transportation.", "user");
 
         setTimeout(() => {
 
-            addMessage(
-                `
+            addMessage(`
                 <strong>What transportation do you need?</strong>
                 <br><br>
+
                 🚗 Parking<br>
                 🚕 Taxi<br>
                 📱 Rideshare<br>
                 🚙 Rental car<br>
                 🚌 Public transportation<br>
                 👋 Passenger pickup
-                `
-            );
+
+                <br><br>
+
+                <button class="action-button"
+                    onclick="showSurvey()">
+                    Finish & Give Feedback
+                </button>
+            `);
 
         }, 400);
 
+        return;
     }
-
 }
 
+
+// ==============================
+// PROCESS USER MESSAGES
+// ==============================
 
 function processMessage(text) {
 
     const lower = text.toLowerCase();
 
 
+    // ------------------------------
     // DEPARTURE
+    // ------------------------------
 
     if (currentJourney === "departure") {
 
@@ -200,7 +224,9 @@ function processMessage(text) {
                 addMessage(`
                     <div class="journey-card">
 
-                        <strong>Choose your current location:</strong>
+                        <strong>
+                            Choose your current location:
+                        </strong>
 
                         <br><br>
 
@@ -231,11 +257,12 @@ function processMessage(text) {
 
             return;
         }
-
     }
 
 
+    // ------------------------------
     // GATE
+    // ------------------------------
 
     if (currentJourney === "gate") {
 
@@ -261,11 +288,12 @@ function processMessage(text) {
 
             return;
         }
-
     }
 
 
+    // ------------------------------
     // ARRIVAL
+    // ------------------------------
 
     if (currentJourney === "arrival") {
 
@@ -277,11 +305,12 @@ function processMessage(text) {
 
             return;
         }
-
     }
 
 
+    // ------------------------------
     // CONNECTION
+    // ------------------------------
 
     if (currentJourney === "connection") {
 
@@ -292,7 +321,7 @@ function processMessage(text) {
             conversationStep = 1;
 
             addMessage(
-                "Thanks. What is your departure/connecting flight number?"
+                "Thanks. What is your departure or connecting flight number?"
             );
 
             return;
@@ -305,11 +334,12 @@ function processMessage(text) {
 
             return;
         }
-
     }
 
 
+    // ------------------------------
     // GENERAL QUESTIONS
+    // ------------------------------
 
     if (
         lower.includes("security") ||
@@ -320,14 +350,19 @@ function processMessage(text) {
             <strong>Security at CLT</strong>
 
             <p>
-            CLT has multiple security checkpoints.
+                CLT has multiple security checkpoints.
             </p>
 
             <p>
-            For this prototype, I'm showing general
-            airport guidance. Always verify current
-            checkpoint information before traveling.
+                For this prototype, I'm showing general
+                airport guidance. Always verify current
+                checkpoint information before traveling.
             </p>
+
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
         `);
 
         return;
@@ -343,14 +378,19 @@ function processMessage(text) {
             <strong>Rideshare</strong>
 
             <p>
-            CLT provides designated rideshare pickup
-            areas.
+                CLT provides designated rideshare pickup
+                areas.
             </p>
 
             <p>
-            Follow airport signs for the current
-            rideshare pickup location.
+                Follow airport signs for the current
+                rideshare pickup location.
             </p>
+
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
         `);
 
         return;
@@ -366,18 +406,19 @@ function processMessage(text) {
             <strong>Baggage</strong>
 
             <p>
-            If you are arriving at CLT, follow signs
-            for Baggage Claim after leaving the aircraft.
+                If you are arriving at CLT, follow signs
+                for Baggage Claim after leaving the aircraft.
             </p>
-            
-<button class="action-button"
-    onclick="showSurvey()">
-    Finish & Give Feedback
-</button>
+
             <p>
-            If your checked bag is missing, contact
-            your airline's baggage service.
+                If your checked bag is missing, contact
+                your airline's baggage service.
             </p>
+
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
         `);
 
         return;
@@ -403,9 +444,12 @@ function processMessage(text) {
         <br>
         "Where is my gate?"
     `);
-
 }
 
+
+// ==============================
+// CHOOSE LOCATION
+// ==============================
 
 function chooseLocation(location) {
 
@@ -418,9 +462,12 @@ function chooseLocation(location) {
         showDeparturePlan();
 
     }, 300);
-
 }
 
+
+// ==============================
+// SHOW GATE
+// ==============================
 
 function showGate() {
 
@@ -444,8 +491,8 @@ function showGate() {
             <strong>Next step</strong>
 
             <p>
-            Follow airport signs toward Concourse B
-            and Gate B7.
+                Follow airport signs toward Concourse B
+                and Gate B7.
             </p>
 
             <button class="action-button"
@@ -453,11 +500,19 @@ function showGate() {
                 Get Directions
             </button>
 
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
+
         </div>
     `);
-
 }
 
+
+// ==============================
+// SHOW DEPARTURE PLAN
+// ==============================
 
 function showDeparturePlan() {
 
@@ -515,8 +570,8 @@ function showDeparturePlan() {
             <strong>Next step</strong>
 
             <p>
-            Proceed through security and follow signs
-            for Concourse B.
+                Proceed through security and follow signs
+                for Concourse B.
             </p>
 
             <button class="action-button"
@@ -524,11 +579,19 @@ function showDeparturePlan() {
                 View Directions
             </button>
 
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
+
         </div>
     `);
-
 }
 
+
+// ==============================
+// SHOW DIRECTIONS
+// ==============================
 
 function showDirections() {
 
@@ -538,21 +601,21 @@ function showDirections() {
             <h3>Directions to Gate B7</h3>
 
             <p>
-            📍 Current location:
-            ${passenger.location || "Airport terminal"}
+                📍 Current location:
+                ${passenger.location || "Airport terminal"}
             </p>
 
             <p>
-            → Proceed toward security.
+                → Proceed toward security.
             </p>
 
             <p>
-            → After security, follow signs for
-            Concourse B.
+                → After security, follow signs for
+                Concourse B.
             </p>
 
             <p>
-            → Continue toward Gate B7.
+                → Continue toward Gate B7.
             </p>
 
             <button class="action-button"
@@ -560,11 +623,19 @@ function showDirections() {
                 Open Airport Map
             </button>
 
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
+
         </div>
     `);
-
 }
 
+
+// ==============================
+// SHOW ARRIVAL
+// ==============================
 
 function showArrival() {
 
@@ -592,13 +663,21 @@ function showArrival() {
         </div>
 
         <p>
-        After leaving the aircraft, follow signs
-        toward Baggage Claim if you have checked luggage.
+            After leaving the aircraft, follow signs
+            toward Baggage Claim if you have checked luggage.
         </p>
-    `);
 
+        <button class="action-button"
+            onclick="showSurvey()">
+            Finish & Give Feedback
+        </button>
+    `);
 }
 
+
+// ==============================
+// SHOW CONNECTION
+// ==============================
 
 function showConnection() {
 
@@ -608,32 +687,38 @@ function showConnection() {
             <h3>Connection Plan</h3>
 
             <p>
-            ✈️ Arrival flight:
-            ${passenger.flight}
+                ✈️ Arrival flight:
+                ${passenger.flight}
             </p>
 
             <p>
-            🔄 Connecting flight identified.
+                🔄 Connecting flight identified.
             </p>
 
             <p>
-            For this prototype, your next step is
-            to follow airport signs to your connecting
-            gate and verify the current gate on airport
-            displays.
+                For this prototype, your next step is
+                to follow airport signs to your connecting
+                gate and verify the current gate on airport
+                displays.
             </p>
+
+            <button class="action-button"
+                onclick="showSurvey()">
+                Finish & Give Feedback
+            </button>
 
         </div>
     `);
-
 }
+
+
 // ==============================
 // END-OF-JOURNEY SURVEY
 // ==============================
 
-let surveyHelpful = null;
-
 function showSurvey() {
+
+    surveyHelpful = null;
 
     addMessage(`
         <div class="journey-card" id="surveyCard">
@@ -641,7 +726,9 @@ function showSurvey() {
             <h3>Quick Feedback</h3>
 
             <p>
-                <strong>Was this information helpful?</strong>
+                <strong>
+                    1. Was this information helpful?
+                </strong>
             </p>
 
             <button class="action-button"
@@ -657,7 +744,9 @@ function showSurvey() {
             <br><br>
 
             <p>
-                <strong>Is there anything we could improve?</strong>
+                <strong>
+                    2. Is there anything we could improve?
+                </strong>
             </p>
 
             <textarea
@@ -715,12 +804,23 @@ function submitSurvey() {
         return;
     }
 
+
     const surveyCard =
         document.getElementById("surveyCard");
 
     if (surveyCard) {
         surveyCard.remove();
     }
+
+
+    if (feedback) {
+
+        addMessage(
+            feedback,
+            "user"
+        );
+    }
+
 
     addMessage(`
         <strong>Thank you for your feedback!</strong>
@@ -730,33 +830,11 @@ function submitSurvey() {
             CLT passenger experience.
         </p>
     `);
+
+
+    console.log("Survey response:", {
+        journey: currentJourney,
+        helpful: surveyHelpful,
+        feedback: feedback
+    });
 }
-<div class="journey-card">
-
-    <strong>Next step</strong>
-
-    <p>
-        Proceed through security and follow signs
-        for Concourse B.
-    </p>
-
-    <button class="action-button"
-        onclick="showDirections()">
-        View Directions
-    </button>
-
-    <button class="action-button"
-        onclick="showSurvey()">
-        Finish & Give Feedback
-    </button>
-
-</div>
-<button class="action-button"
-    onclick="showDirections()">
-    Get Directions
-</button>
-
-<button class="action-button"
-    onclick="showSurvey()">
-    Finish & Give Feedback
-</button>
