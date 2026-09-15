@@ -142,7 +142,8 @@ function startJourney(type) {
 
         setTimeout(() => {
 
-            addMessage(`
+            addMessage(
+                `
                 <strong>What transportation do you need?</strong>
                 <br><br>
                 🚗 Parking<br>
@@ -151,7 +152,8 @@ function startJourney(type) {
                 🚙 Rental car<br>
                 🚌 Public transportation<br>
                 👋 Passenger pickup
-            `);
+                `
+            );
 
         }, 400);
 
@@ -447,11 +449,6 @@ function showGate() {
                 Get Directions
             </button>
 
-            <button class="action-button"
-                onclick="showSurvey()">
-                Finish & Give Feedback
-            </button>
-
         </div>
     `);
 
@@ -521,11 +518,6 @@ function showDeparturePlan() {
             <button class="action-button"
                 onclick="showDirections()">
                 View Directions
-            </button>
-
-            <button class="action-button"
-                onclick="showSurvey()">
-                Finish & Give Feedback
             </button>
 
         </div>
@@ -599,11 +591,6 @@ function showArrival() {
         After leaving the aircraft, follow signs
         toward Baggage Claim if you have checked luggage.
         </p>
-
-        <button class="action-button"
-            onclick="showSurvey()">
-            Finish & Give Feedback
-        </button>
     `);
 
 }
@@ -632,138 +619,7 @@ function showConnection() {
             displays.
             </p>
 
-            <button class="action-button"
-                onclick="showSurvey()">
-                Finish & Give Feedback
-            </button>
-
         </div>
     `);
-
-}
-
-
-// ==============================
-// END-OF-JOURNEY SURVEY
-// ==============================
-
-let surveyHelpful = null;
-
-
-function showSurvey() {
-
-    surveyHelpful = null;
-
-    addMessage(`
-        <div class="journey-card" id="surveyCard">
-
-            <h3>Quick Feedback</h3>
-
-            <p>
-                <strong>1. Was this information helpful?</strong>
-            </p>
-
-            <button class="action-button"
-                onclick="selectHelpful('Yes')">
-                👍 Yes
-            </button>
-
-            <button class="action-button"
-                onclick="selectHelpful('No')">
-                👎 No
-            </button>
-
-            <br><br>
-
-            <p>
-                <strong>2. Is there anything we could improve?</strong>
-            </p>
-
-            <textarea
-                id="surveyFeedback"
-                placeholder="Optional feedback..."
-                style="
-                    width: 100%;
-                    min-height: 80px;
-                    padding: 10px;
-                    border: 1px solid #ccd5df;
-                    border-radius: 8px;
-                    font-family: inherit;
-                    resize: vertical;
-                "
-            ></textarea>
-
-            <br><br>
-
-            <button class="action-button"
-                onclick="submitSurvey()">
-                Submit Feedback
-            </button>
-
-        </div>
-    `);
-
-}
-
-
-function selectHelpful(answer) {
-
-    surveyHelpful = answer;
-
-    const buttons =
-        document.querySelectorAll("#surveyCard .action-button");
-
-    if (buttons.length >= 2) {
-
-        buttons[0].disabled =
-            answer === "Yes";
-
-        buttons[1].disabled =
-            answer === "No";
-    }
-
-}
-
-
-function submitSurvey() {
-
-    if (surveyHelpful === null) {
-
-        alert("Please select Yes or No.");
-
-        return;
-    }
-
-
-    const feedbackBox =
-        document.getElementById("surveyFeedback");
-
-    const feedback =
-        feedbackBox ? feedbackBox.value.trim() : "";
-
-
-    const surveyCard =
-        document.getElementById("surveyCard");
-
-    if (surveyCard) {
-        surveyCard.remove();
-    }
-
-
-    addMessage(`
-        <strong>Thank you for your feedback!</strong>
-
-        <p>
-            Your feedback helps us improve the
-            CLT passenger experience.
-        </p>
-    `);
-
-
-    console.log("Survey response:", {
-        journey: currentJourney,
-        helpful: surveyHelpful,
-        feedback: feedback
-    });
 
 }
