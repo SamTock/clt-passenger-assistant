@@ -369,7 +369,11 @@ function processMessage(text) {
             If you are arriving at CLT, follow signs
             for Baggage Claim after leaving the aircraft.
             </p>
-
+            
+<button class="action-button"
+    onclick="showSurvey()">
+    Finish & Give Feedback
+</button>
             <p>
             If your checked bag is missing, contact
             your airline's baggage service.
@@ -727,3 +731,32 @@ function submitSurvey() {
         </p>
     `);
 }
+<div class="journey-card">
+
+    <strong>Next step</strong>
+
+    <p>
+        Proceed through security and follow signs
+        for Concourse B.
+    </p>
+
+    <button class="action-button"
+        onclick="showDirections()">
+        View Directions
+    </button>
+
+    <button class="action-button"
+        onclick="showSurvey()">
+        Finish & Give Feedback
+    </button>
+
+</div>
+<button class="action-button"
+    onclick="showDirections()">
+    Get Directions
+</button>
+
+<button class="action-button"
+    onclick="showSurvey()">
+    Finish & Give Feedback
+</button>
