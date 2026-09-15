@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CLT Passenger Assistant</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <header class="header">
+
+            <div class="logo">
+                ✈️
+            </div>
+
+            <div>
+                <h1>CLT Passenger Assistant</h1>
+                <p>Charlotte Douglas International Airport</p>
+            </div>
+
+        </header>
+
+
+        <main class="chat-container">
+
+            <div id="chat">
+
+                <div class="message assistant">
+
+                    <div class="message-title">
+                        CLT Passenger Assistant
+                    </div>
+
+                    <p>
+                        Welcome to Charlotte Douglas International Airport.
+                    </p>
+
+                    <p>
+                        I can help you navigate your airport journey.
+                    </p>
+
+                    <p>
+                        What can I help you with today?
+                    </p>
+
+                    <div class="quick-buttons">
+
+                        <button onclick="startJourney('departure')">
+                            ✈️ I'm Flying Out
+                        </button>
+
+                        <button onclick="startJourney('arrival')">
+                            🛬 I'm Arriving
+                        </button>
+
+                        <button onclick="startJourney('connection')">
+                            🔄 I Have a Connection
+                        </button>
+
+                        <button onclick="startJourney('gate')">
+                            📍 Find My Gate
+                        </button>
+
+                        <button onclick="startJourney('baggage')">
+                            🧳 Find Baggage
+                        </button>
+
+                        <button onclick="startJourney('transportation')">
+                            🚗 Transportation
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="input-area">
+
+                <input
+                    id="userInput"
+                    type="text"
+                    placeholder="Ask me about your CLT journey..."
+                    onkeydown="handleEnter(event)"
+                >
+
+                <button onclick="sendMessage()">
+                    Send
+                </button>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
