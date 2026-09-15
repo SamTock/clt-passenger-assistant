@@ -623,3 +623,107 @@ function showConnection() {
     `);
 
 }
+// ==============================
+// END-OF-JOURNEY SURVEY
+// ==============================
+
+let surveyHelpful = null;
+
+function showSurvey() {
+
+    addMessage(`
+        <div class="journey-card" id="surveyCard">
+
+            <h3>Quick Feedback</h3>
+
+            <p>
+                <strong>Was this information helpful?</strong>
+            </p>
+
+            <button class="action-button"
+                onclick="selectHelpful('Yes')">
+                👍 Yes
+            </button>
+
+            <button class="action-button"
+                onclick="selectHelpful('No')">
+                👎 No
+            </button>
+
+            <br><br>
+
+            <p>
+                <strong>Is there anything we could improve?</strong>
+            </p>
+
+            <textarea
+                id="surveyFeedback"
+                placeholder="Optional feedback..."
+                style="
+                    width: 100%;
+                    min-height: 80px;
+                    padding: 10px;
+                    border: 1px solid #ccd5df;
+                    border-radius: 8px;
+                    font-family: inherit;
+                    resize: vertical;
+                ">
+            </textarea>
+
+            <br><br>
+
+            <button class="action-button"
+                onclick="submitSurvey()">
+                Submit Feedback
+            </button>
+
+        </div>
+    `);
+}
+
+
+function selectHelpful(answer) {
+
+    surveyHelpful = answer;
+
+    addMessage(
+        answer === "Yes"
+            ? "👍 Yes, this was helpful."
+            : "👎 No, this was not helpful.",
+        "user"
+    );
+}
+
+
+function submitSurvey() {
+
+    const feedbackBox =
+        document.getElementById("surveyFeedback");
+
+    const feedback = feedbackBox
+        ? feedbackBox.value.trim()
+        : "";
+
+    if (surveyHelpful === null) {
+
+        alert("Please select Yes or No.");
+
+        return;
+    }
+
+    const surveyCard =
+        document.getElementById("surveyCard");
+
+    if (surveyCard) {
+        surveyCard.remove();
+    }
+
+    addMessage(`
+        <strong>Thank you for your feedback!</strong>
+
+        <p>
+            Your feedback helps us improve the
+            CLT passenger experience.
+        </p>
+    `);
+}
